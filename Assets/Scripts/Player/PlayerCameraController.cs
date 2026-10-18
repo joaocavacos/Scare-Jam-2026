@@ -38,6 +38,10 @@ public class PlayerCameraController : MonoBehaviour
         {
             defaultYPosition = playerCamera.localPosition.y;
         }
+
+        // TODO: Remove after game state management is implemented
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void LateUpdate()
