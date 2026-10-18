@@ -1,0 +1,94 @@
+using UnityEngine;
+
+public class PlayerCameraController : MonoBehaviour
+{
+    [Header("References")]
+    [SerializeField] private Transform playerCamera;
+
+    [Header("Sensitivity")]
+    [SerializeField] private float lookSensitivity = 0.15f;
+
+    [Header("Limits")]
+    [SerializeField] private float topClamp = -89.0f;
+    [SerializeField] private float bottomClamp = 89.0f;
+
+    [Header("Headbob Settings")]
+    [SerializeField] private float bobFrequency = 12f;
+    [SerializeField] private float bobAmplitude = 0.05f;
+    [SerializeField] private float sprintMultiplier = 1.5f;
+
+    private PlayerInputHandler inputHandler;
+    private CharacterController characterController;
+    private float cameraPitch = 0.0f;
+
+    // Headbob tracking
+    private float defaultYPosition = 0f;
+    private float timer = 0f;
+
+
+    private void Awake()
+    {
+        inputHandler = GetComponent<PlayerInputHandler>();
+        characterController = GetComponent<CharacterController>();
+    }
+
+    private void Start()
+    {
+        if (playerCamera != null)
+        {
+            defaultYPosition = playerCamera.localPosition.y;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        ApplyCameraLook();
+        ApplyHeadbob();
+    }
+
+    private void ApplyCameraLook()
+    {
+        Vector2 lookInput = inputHandler.LookInput * lookSensitivity;
+
+        // Calculate pitch, we subtract the Y input so pushing the mouse up looks up (standard non-inverted)
+        cameraPitch -= lookInput.y;
+        cameraPitch = Mathf.Clamp(cameraPitch, topClamp, bottomClamp);
+
+        playerCamera.localRotation = Quaternion.Euler(cameraPitch, 0f, 0f);
+
+        // Calculate Yaw and apply directly to the Player's body so forward movement always matches where you look
+        transform.Rotate(Vector3.up * lookInput.x);
+    }
+
+    private void ApplyHeadbob()
+    {
+        if (!characterController.isGrounded)
+        {
+            return;
+        }
+
+        // Calculate horizontal speed
+        float speed = new Vector3(characterController.velocity.x, 0, characterController.velocity.z).magnitude;
+
+        if (speed > 0.1f)
+        {
+            // Advance the sine wave timer based on speed. 
+            // Dividing by 3.0f normalizes it against our base walk speed.
+            timer += Time.deltaTime * bobFrequency * (speed / 3.0f);
+
+            // Increase amplitude if moving faster than walking
+            float currentAmplitude = (speed > 4.0f) ? bobAmplitude * sprintMultiplier : bobAmplitude;
+
+            // Calculate the new Y position
+            float newY = defaultYPosition + Mathf.Sin(timer) * currentAmplitude;
+            playerCamera.localPosition = new Vector3(playerCamera.localPosition.x, newY, playerCamera.localPosition.z);
+        }
+        else
+        {
+            // Smoothly reset the camera to the center when stopped
+            timer = 0;
+            float resetY = Mathf.Lerp(playerCamera.localPosition.y, defaultYPosition, Time.deltaTime * 5f);
+            playerCamera.localPosition = new Vector3(playerCamera.localPosition.x, resetY, playerCamera.localPosition.z);
+        }
+    }
+}
