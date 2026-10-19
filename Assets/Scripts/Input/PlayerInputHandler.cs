@@ -12,6 +12,7 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action OnInteract;
     public event Action<bool> OnToggleCrouch;
     public event Action<bool> OnToggleSprint;
+    public event Action<bool> OnHoldBreath;
 
     private bool isCrouched = false;
 
@@ -36,6 +37,9 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Sprint.canceled += HandleSprint;
 
         inputActions.Player.Interact.performed += HandleInteract;
+
+        inputActions.Player.HoldBreath.performed += HandleBreath;
+        inputActions.Player.HoldBreath.canceled += HandleBreath;
     }
 
     private void OnDisable()
@@ -54,6 +58,9 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Sprint.canceled -= HandleSprint;
 
         inputActions.Player.Interact.performed -= HandleInteract;
+        
+        inputActions.Player.HoldBreath.performed -= HandleBreath;
+        inputActions.Player.HoldBreath.canceled -= HandleBreath;
     }
 
     private void HandleCrouch(InputAction.CallbackContext context)
@@ -77,5 +84,17 @@ public class PlayerInputHandler : MonoBehaviour
     private void HandleInteract(InputAction.CallbackContext context)
     {
         OnInteract?.Invoke();
+    }
+    
+    private void HandleBreath(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            OnHoldBreath?.Invoke(true);
+        }
+        else if (context.canceled)
+        {
+            OnHoldBreath?.Invoke(false);
+        }
     }
 }
