@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerInteractionHandler : MonoBehaviour
@@ -10,6 +11,11 @@ public class PlayerInteractionHandler : MonoBehaviour
     private InventoryHandler inventoryHandler;
 
     private GameObject currentInteractionTarget;
+
+    private bool isInteractingWithTarget = false;
+
+    // Events
+    public static Action<bool> OnInteractableTargeted;
 
     private void Awake()
     {
@@ -30,10 +36,12 @@ public class PlayerInteractionHandler : MonoBehaviour
     private void Update()
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+        bool foundInteractable = false;
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactionLayer))
         {
             currentInteractionTarget = hit.collider.gameObject;
+            foundInteractable = true;
 
             Debug.DrawLine(ray.origin, hit.point, Color.green);
         }
@@ -42,6 +50,12 @@ public class PlayerInteractionHandler : MonoBehaviour
             currentInteractionTarget = null;
 
             Debug.DrawRay(ray.origin, ray.direction * interactionRange, Color.red);
+        }
+
+        if(foundInteractable != isInteractingWithTarget)
+        {
+            isInteractingWithTarget = foundInteractable;
+            OnInteractableTargeted?.Invoke(isInteractingWithTarget);
         }
     }
 
@@ -63,5 +77,9 @@ public class PlayerInteractionHandler : MonoBehaviour
             ItemData itemData = collectable.PickupItem();
             inventoryHandler.AddItem(itemData);
         }
+
+        currentInteractionTarget = null;
+        isInteractingWithTarget = false;
+        OnInteractableTargeted?.Invoke(isInteractingWithTarget);
     }
 }
