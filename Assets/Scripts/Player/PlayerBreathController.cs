@@ -6,7 +6,7 @@ public class PlayerBreathController : MonoBehaviour
     [Header("Breath Settings")]
     [SerializeField, Tooltip("Maximum amount of seconds that the player can hold its breath")] 
     private float maxBreathTime = 5.0f;
-    [SerializeField, Tooltip("The multiplier for regaining the breath")] 
+    [SerializeField, Tooltip("The rate at which the player recovers its breath")] 
     private float recoveryRate = 2.0f;
 
     public static event Action<float> OnBreathUpdated;
