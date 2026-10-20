@@ -1185,6 +1185,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1341874886}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &863795971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 863795972}
+  m_Layer: 6
+  m_Name: ExitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &863795972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863795971}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.75, z: -1.0999999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2091353507}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &928738237
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,6 +1378,7 @@ GameObject:
   - component: {fileID: 1081183874}
   - component: {fileID: 1081183875}
   - component: {fileID: 1081183876}
+  - component: {fileID: 1081183877}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1569,6 +1601,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBreathController
   maxBreathTime: 5
   recoveryRate: 2
+--- !u!114 &1081183877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081183864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4786a1f7891e62f418a44a38de512cd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHidingController
+  playerCamera: {fileID: 552533528}
+  lookSensitivity: 0.15
+  maxLookAngle: 45
 --- !u!1 &1131783208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1996,13 +2043,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1360863529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8be6bc5fe900c848bcf72b5bb9315e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c6659cbab247234eb3bda2ab2c19a72, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BreathVignetteEffect
-  normalIntensity: 0.2
-  chokedIntensity: 0.6
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPostProcessingManager
+  baseVignette: 0.2
+  transitionSpeed: 5
+  maxBreathVignette: 0.6
   normalColor: {r: 0, g: 0, b: 0, a: 1}
-  outOfBreathColor: {r: 0.15, g: 0, b: 0, a: 1}
+  chokedColor: {r: 0.15, g: 0, b: 0, a: 1}
+  hidingVignette: 0.5
+  normalFocusDistance: 10
+  hidingFocusDistance: 0.5
 --- !u!1 &1372971662
 GameObject:
   m_ObjectHideFlags: 0
@@ -2233,6 +2284,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff1011d883d3cd40a47426cea5b63cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreathSlider
+--- !u!1 &1592519011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592519012}
+  m_Layer: 6
+  m_Name: HidingPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1592519012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592519011}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: -0.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2091353507}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1644508220
 GameObject:
   m_ObjectHideFlags: 0
@@ -2377,8 +2459,9 @@ GameObject:
   - component: {fileID: 2006995248}
   - component: {fileID: 2006995247}
   - component: {fileID: 2006995246}
-  m_Layer: 0
-  m_Name: Cube (3)
+  - component: {fileID: 2006995249}
+  m_Layer: 6
+  m_Name: EntranceTriggerObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2477,6 +2560,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006995244}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2006995249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006995244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8e170a4a944434e9e7281a7666491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HidingTriggerObject
+  hidingPlaceTransform: {fileID: 1592519012}
+  exitPlaceTransform: {fileID: 863795972}
 --- !u!1 &2091353506
 GameObject:
   m_ObjectHideFlags: 0
@@ -2486,7 +2583,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2091353507}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: HidingInteractableTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2510,6 +2607,8 @@ Transform:
   - {fileID: 2141562494}
   - {fileID: 585508879}
   - {fileID: 2006995245}
+  - {fileID: 1592519012}
+  - {fileID: 863795972}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2141562493

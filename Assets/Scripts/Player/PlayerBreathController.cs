@@ -15,7 +15,8 @@ public class PlayerBreathController : MonoBehaviour
 
     private float currentBreath;
     private bool isHoldingBreathInput = false;
-    
+    private bool canHoldBreath = true;
+
     public bool IsHoldingBreath { get; private set; } 
 
     private void Awake()
@@ -27,15 +28,34 @@ public class PlayerBreathController : MonoBehaviour
     private void OnEnable()
     {
         inputHandler.OnHoldBreath += OnBreathInput;
+        PlayerHidingController.OnHidingStateChanged += HandleHidingState;
     }
 
     private void OnDisable()
     {
         inputHandler.OnHoldBreath -= OnBreathInput;
+        PlayerHidingController.OnHidingStateChanged -= HandleHidingState;
+    }
+    
+    private void HandleHidingState(bool isHiding)
+    {
+        // If we are hiding, we can't hold our breath
+        canHoldBreath = !isHiding;
+
+        // If the player enters the locker while holding their breath, force them to let go
+        if (isHiding)
+        {
+            isHoldingBreathInput = false;
+        }
     }
 
     private void OnBreathInput(bool isHolding)
     {
+        if (!canHoldBreath)
+        {
+            return;
+        }
+        
         isHoldingBreathInput = isHolding;
     }
 

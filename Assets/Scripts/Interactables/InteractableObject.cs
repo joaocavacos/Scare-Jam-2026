@@ -2,7 +2,7 @@ using ArtificeToolkit.Attributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class InteractableItem : MonoBehaviour, IInteractable
+public class InteractableObject : MonoBehaviour, IInteractable
 {
     [SerializeField] private bool useUnityEvent;
     [SerializeField, EnableIf(nameof(useUnityEvent))] private UnityEvent interactUnityEvent;

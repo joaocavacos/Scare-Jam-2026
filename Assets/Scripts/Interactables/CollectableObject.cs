@@ -2,7 +2,7 @@ using ArtificeToolkit.Attributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CollectableItem : MonoBehaviour, ICollectable
+public class CollectableObject : MonoBehaviour, ICollectable
 {[SerializeField] private ItemData itemData;
      [SerializeField] private bool useUnityEvent;
      [SerializeField, EnableIf(nameof(useUnityEvent))] private UnityEvent collectUnityEvent;
