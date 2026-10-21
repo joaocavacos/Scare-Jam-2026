@@ -1836,7 +1836,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraController
   playerCamera: {fileID: 552533528}
-  lookSensitivity: 0.15
+  useDebugSensitivity: 1
+  debugLookSensitivity: 0.15
   topClamp: -90
   bottomClamp: 90
   bobFrequency: 12
