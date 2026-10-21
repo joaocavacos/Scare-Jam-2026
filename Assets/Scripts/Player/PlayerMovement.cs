@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         if(input.sqrMagnitude > 0f)
         {
             Vector3 moveDirection = transform.right * input.x + transform.forward * input.y;
-            controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+            controller.Move(moveDirection * (currentSpeed * Time.deltaTime));
         }
     }
 
