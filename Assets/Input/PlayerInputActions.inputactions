@@ -65,6 +65,16 @@
                     "interactions": "Hold",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "Glowstick",
+                    "type": "Button",
+                    "id": "e70bdf81-5b63-4d75-a527-a9cc852ebdf8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -329,6 +339,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "HoldBreath",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "02d56ab6-380a-4955-977a-d144ddd22a91",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Glowstick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

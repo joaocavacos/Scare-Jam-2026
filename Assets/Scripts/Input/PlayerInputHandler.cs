@@ -10,6 +10,7 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 LookInput { get; private set; }
 
     public event Action OnInteract;
+    public event Action OnSnapGlowstick;
     public event Action<bool> OnToggleCrouch;
     public event Action<bool> OnToggleSprint;
     public event Action<bool> OnHoldBreath;
@@ -40,6 +41,8 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.HoldBreath.performed += HandleBreath;
         inputActions.Player.HoldBreath.canceled += HandleBreath;
+
+        inputActions.Player.Glowstick.performed += ctx => OnSnapGlowstick?.Invoke();
     }
 
     private void OnDisable()
@@ -61,6 +64,8 @@ public class PlayerInputHandler : MonoBehaviour
         
         inputActions.Player.HoldBreath.performed -= HandleBreath;
         inputActions.Player.HoldBreath.canceled -= HandleBreath;
+
+        inputActions.Player.Glowstick.performed -= ctx => OnSnapGlowstick?.Invoke();
     }
 
     private void HandleCrouch(InputAction.CallbackContext context)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class InventoryHandler : MonoBehaviour
 {
@@ -35,16 +36,13 @@ public class InventoryHandler : MonoBehaviour
         }
     }
 
+    public InventoryItem GetItemByData(ItemData itemData)
+    {
+        return inventoryList.FirstOrDefault(item => item.itemData == itemData);
+    }
+
     public InventoryItem GetItemByString(string itemName)
     {
-        foreach (InventoryItem item in inventoryList)
-        {
-            if (item.itemData.itemName.Equals(itemName))
-            {
-                return item;
-            }
-        }
-
-        return null;
+        return inventoryList.FirstOrDefault(item => item.itemData.itemName.Equals(itemName));
     }
 }
