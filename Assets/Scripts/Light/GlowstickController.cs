@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GlowstickController : MonoBehaviour
 {
+    private static readonly int EmissiveMultiplier = Shader.PropertyToID("_EmissiveMultiplier");
+
     [Header("References")]
     [SerializeField] private Light glowstickLight;
     [SerializeField] private AudioSource audioSource;
@@ -23,6 +25,10 @@ public class GlowstickController : MonoBehaviour
     [SerializeField] private float duration = 15f;
     [SerializeField, Tooltip("X axis is Time (0 to 1). Y axis is Light Intensity (0 to 1).")] 
     private AnimationCurve lightCurve; 
+    
+    [Header("Material Glow (Shader Graph)")]
+    [SerializeField] private MeshRenderer glowstickRenderer;
+    [SerializeField] private float maxEmissiveMultiplier = 2.0f;
 
     [Header("AI Alert Settings")]
     [SerializeField] private float noiseRadius = 20f;
@@ -33,22 +39,53 @@ public class GlowstickController : MonoBehaviour
     private float currentTimer = 0f;
     private bool isActive = false;
 
-    private void Awake()
+    private void Start()
     {
         if (glowstickLight != null)
         {
             glowstickLight.intensity = 0f;
+        }
+
+        if (glowstickRenderer != null)
+        {
+            InventoryItem glowstickItem = inventoryHandler.GetItemByData(glowstickData);
+            bool hasGlowstick = glowstickItem != null && glowstickItem.quantity > 0;
+
+            if (hasGlowstick) OnGlowstickAddedToInventory(glowstickData, true);
+            else OnGlowstickRemovedFromInventory(glowstickData, true);
+
+            glowstickRenderer.material.SetFloat(EmissiveMultiplier, 0.1f);
         }
     }
 
     private void OnEnable()
     {
         PlayerInputHandler.OnSnapGlowstick += HandleSnap;
+        InventoryHandler.OnInventoryItemAdded += OnGlowstickAddedToInventory;
+        InventoryHandler.OnInventoryItemRemoved += OnGlowstickRemovedFromInventory;
     }
 
     private void OnDisable()
     {
         PlayerInputHandler.OnSnapGlowstick -= HandleSnap;
+        InventoryHandler.OnInventoryItemAdded -= OnGlowstickAddedToInventory;
+        InventoryHandler.OnInventoryItemRemoved -= OnGlowstickRemovedFromInventory;
+    }
+
+    private void OnGlowstickAddedToInventory(ItemData itemData, bool hasBeenAdded)
+    {
+        if (hasBeenAdded && itemData == glowstickData && glowstickRenderer != null)
+        {
+            glowstickRenderer.enabled = true;
+        }
+    }
+
+    private void OnGlowstickRemovedFromInventory(ItemData itemData, bool hasBeenRemoved)
+    {
+        if (hasBeenRemoved && itemData == glowstickData && glowstickRenderer != null)
+        {
+            glowstickRenderer.enabled = false;
+        }
     }
 
     private void HandleSnap()
@@ -115,12 +152,23 @@ public class GlowstickController : MonoBehaviour
             isActive = false;
             glowstickLight.intensity = 0f;
 
+            if (glowstickRenderer != null)
+            {
+                glowstickRenderer.material.SetFloat(EmissiveMultiplier, 0.1f);
+            }
+
             HandleGlowstickDeath();
             return;
         }
 
         // Evaluate the curve and apply the light intensity
-        float curveMultiplier = lightCurve.Evaluate(normalizedTime);
-        glowstickLight.intensity = maxIntensity * curveMultiplier;
+        float currentCurveValue = lightCurve.Evaluate(normalizedTime);
+        glowstickLight.intensity = maxIntensity * currentCurveValue;
+
+        if (glowstickRenderer != null)
+        {
+            float currentMaterialEmission = maxEmissiveMultiplier * currentCurveValue;
+            glowstickRenderer.material.SetFloat(EmissiveMultiplier, currentMaterialEmission);
+        }
     }
 }
