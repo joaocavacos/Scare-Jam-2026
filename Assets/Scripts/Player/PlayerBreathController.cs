@@ -11,8 +11,6 @@ public class PlayerBreathController : MonoBehaviour
 
     public static event Action<float> OnBreathUpdated;
 
-    private PlayerInputHandler inputHandler;
-
     private float currentBreath;
     private bool isHoldingBreathInput = false;
     private bool canHoldBreath = true;
@@ -21,19 +19,18 @@ public class PlayerBreathController : MonoBehaviour
 
     private void Awake()
     {
-        inputHandler = GetComponent<PlayerInputHandler>();
         currentBreath = maxBreathTime;
     }
 
     private void OnEnable()
     {
-        inputHandler.OnHoldBreath += OnBreathInput;
+        PlayerInputHandler.OnHoldBreath += OnBreathInput;
         PlayerHidingController.OnHidingStateChanged += HandleHidingState;
     }
 
     private void OnDisable()
     {
-        inputHandler.OnHoldBreath -= OnBreathInput;
+        PlayerInputHandler.OnHoldBreath -= OnBreathInput;
         PlayerHidingController.OnHidingStateChanged -= HandleHidingState;
     }
     

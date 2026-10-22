@@ -33,7 +33,6 @@ public class PlayerHidingController : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         cameraController = GetComponent<PlayerCameraController>();
         interactionHandler = GetComponent<PlayerInteractionHandler>();
-        inputHandler = GetComponent<PlayerInputHandler>();
     }
     
     private void OnEnable()
@@ -44,7 +43,7 @@ public class PlayerHidingController : MonoBehaviour
     private void OnDisable()
     {
         HidingTriggerObject.OnHidingTriggered -= EnterHiding;
-        inputHandler.OnInteract -= HandleExitHiding;
+        PlayerInputHandler.OnInteract -= HandleExitHiding;
     }
 
     private void EnterHiding(Transform hidePoint, Transform exitPoint)
@@ -54,7 +53,7 @@ public class PlayerHidingController : MonoBehaviour
             return;
         }
 
-        inputHandler.OnInteract += HandleExitHiding;
+        PlayerInputHandler.OnInteract += HandleExitHiding;
         HidingTriggerObject.OnHidingTriggered -= EnterHiding;
 
         isHiding = true;
@@ -106,7 +105,7 @@ public class PlayerHidingController : MonoBehaviour
             return;
         }
 
-        inputHandler.OnInteract -= HandleExitHiding;
+        PlayerInputHandler.OnInteract -= HandleExitHiding;
         HidingTriggerObject.OnHidingTriggered += EnterHiding;
 
         isHiding = false;
