@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravityMultiplier = 2.0f;
 
     private CharacterController controller;
-    private PlayerInputHandler inputHandler;
 
     private Vector3 velocity;
     [SerializeField, ReadOnly] private bool isSprinting = false;
@@ -22,19 +21,18 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        inputHandler = GetComponent<PlayerInputHandler>();
     }
 
     private void OnEnable()
     {
-        inputHandler.OnToggleSprint += HandleSprint;
-        inputHandler.OnToggleCrouch += HandleCrouch;
+        PlayerInputHandler.OnToggleSprint += HandleSprint;
+        PlayerInputHandler.OnToggleCrouch += HandleCrouch;
     }
 
     private void OnDisable()
     {
-        inputHandler.OnToggleSprint -= HandleSprint;
-        inputHandler.OnToggleCrouch -= HandleCrouch;
+        PlayerInputHandler.OnToggleSprint -= HandleSprint;
+        PlayerInputHandler.OnToggleCrouch -= HandleCrouch;
     }
 
     private void Update()
@@ -49,12 +47,12 @@ public class PlayerMovement : MonoBehaviour
         if (isCrouching) currentSpeed = crouchSpeed;
         else if (isSprinting) currentSpeed = sprintSpeed;
 
-        Vector2 input = inputHandler.MoveInput;
+        Vector2 input = PlayerInputHandler.Instance.MoveInput;
 
         if(input.sqrMagnitude > 0f)
         {
             Vector3 moveDirection = transform.right * input.x + transform.forward * input.y;
-            controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+            controller.Move(moveDirection * (currentSpeed * Time.deltaTime));
         }
     }
 

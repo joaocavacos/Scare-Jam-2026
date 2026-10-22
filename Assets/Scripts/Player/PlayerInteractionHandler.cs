@@ -7,7 +7,6 @@ public class PlayerInteractionHandler : MonoBehaviour
     [SerializeField] private float interactionRange = 2.5f;
     [SerializeField] private LayerMask interactionLayer;
 
-    private PlayerInputHandler inputHandler;
     private InventoryHandler inventoryHandler;
 
     private GameObject currentInteractionTarget;
@@ -19,18 +18,17 @@ public class PlayerInteractionHandler : MonoBehaviour
 
     private void Awake()
     {
-        inputHandler = GetComponent<PlayerInputHandler>();
         inventoryHandler = GetComponent<InventoryHandler>();
     }
 
     private void OnEnable()
     {
-        inputHandler.OnInteract += HandleInteract;
+        PlayerInputHandler.OnInteract += HandleInteract;
     }
 
     private void OnDisable()
     {
-        inputHandler.OnInteract -= HandleInteract;
+        PlayerInputHandler.OnInteract -= HandleInteract;
     }
 
     private void Update()

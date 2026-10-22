@@ -9,7 +9,6 @@ public class GlowstickController : MonoBehaviour
     [SerializeField] private AudioClip snapClip;
 
     [Header("Player References")]
-    [SerializeField] private PlayerInputHandler inputHandler;
     [SerializeField] private InventoryHandler inventoryHandler;
 
     [Header("Item Data")]
@@ -44,12 +43,12 @@ public class GlowstickController : MonoBehaviour
 
     private void OnEnable()
     {
-        inputHandler.OnSnapGlowstick += HandleSnap;
+        PlayerInputHandler.OnSnapGlowstick += HandleSnap;
     }
 
     private void OnDisable()
     {
-        inputHandler.OnSnapGlowstick -= HandleSnap;
+        PlayerInputHandler.OnSnapGlowstick -= HandleSnap;
     }
 
     private void HandleSnap()

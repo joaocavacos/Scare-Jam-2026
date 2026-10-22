@@ -2,23 +2,34 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputHandler : MonoBehaviour
+[Serializable]
+public enum ActionMappingsEnum
+{
+    Player,
+    UI,
+    Global
+}
+
+public class PlayerInputHandler : Singleton<PlayerInputHandler>
 {
     private PlayerInputActions inputActions;
 
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
 
-    public event Action OnInteract;
-    public event Action OnSnapGlowstick;
-    public event Action<bool> OnToggleCrouch;
-    public event Action<bool> OnToggleSprint;
-    public event Action<bool> OnHoldBreath;
+    public static event Action OnInteract;
+    public static event Action OnSnapGlowstick;
+    public static event Action OnCancel;
+    public static event Action<bool> OnToggleCrouch;
+    public static event Action<bool> OnToggleSprint;
+    public static event Action<bool> OnHoldBreath;
 
     private bool isCrouched = false;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         inputActions = new PlayerInputActions();
     }
 
@@ -26,6 +37,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         inputActions.Player.Enable();
 
+        // Player Actions
         inputActions.Player.Move.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += ctx => MoveInput = Vector2.zero;
 
@@ -37,18 +49,22 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Sprint.started += HandleSprint;
         inputActions.Player.Sprint.canceled += HandleSprint;
 
-        inputActions.Player.Interact.performed += HandleInteract;
+        inputActions.Player.Interact.performed += ctx => OnInteract?.Invoke();
 
         inputActions.Player.HoldBreath.performed += HandleBreath;
         inputActions.Player.HoldBreath.canceled += HandleBreath;
 
         inputActions.Player.Glowstick.performed += ctx => OnSnapGlowstick?.Invoke();
+
+        // UI Actions
+        inputActions.UI.Cancel.performed += ctx => OnCancel?.Invoke();
     }
 
     private void OnDisable()
     {
         inputActions.Player.Disable();
 
+        // Player Actions
         inputActions.Player.Move.performed -= ctx => MoveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled -= ctx => MoveInput = Vector2.zero;
 
@@ -60,12 +76,30 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Sprint.started -= HandleSprint;
         inputActions.Player.Sprint.canceled -= HandleSprint;
 
-        inputActions.Player.Interact.performed -= HandleInteract;
+        inputActions.Player.Interact.performed -= ctx => OnInteract?.Invoke();
         
         inputActions.Player.HoldBreath.performed -= HandleBreath;
         inputActions.Player.HoldBreath.canceled -= HandleBreath;
 
         inputActions.Player.Glowstick.performed -= ctx => OnSnapGlowstick?.Invoke();
+
+        // UI Actions
+        inputActions.UI.Cancel.performed -= ctx => OnCancel?.Invoke();
+    }
+
+    public void ChangeInputMapping(ActionMappingsEnum inputMapping)
+    {
+        switch (inputMapping)
+        {
+            case ActionMappingsEnum.Player:
+                inputActions.Player.Enable();
+                inputActions.UI.Disable();
+                break;
+            case ActionMappingsEnum.UI:
+                inputActions.Player.Disable();
+                inputActions.UI.Enable();
+                break;
+        }
     }
 
     private void HandleCrouch(InputAction.CallbackContext context)
@@ -84,11 +118,6 @@ public class PlayerInputHandler : MonoBehaviour
         {
             OnToggleSprint?.Invoke(false);
         }
-    }
-
-    private void HandleInteract(InputAction.CallbackContext context)
-    {
-        OnInteract?.Invoke();
     }
     
     private void HandleBreath(InputAction.CallbackContext context)

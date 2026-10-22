@@ -1,17 +1,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameStateManager : MonoBehaviour
+public class GameStateManager : Singleton<GameStateManager>
 {
     private PlayerInputActions inputActions;
 
     private bool isGamePaused = false;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         inputActions = new PlayerInputActions();
 
-        inputActions.Global.TogglePause.performed += _ => ToggleGameState();
+        //inputActions.Global.TogglePause.performed += _ => ToggleGameState();
     }
 
     private void OnEnable()
@@ -42,7 +44,7 @@ public class GameStateManager : MonoBehaviour
         //SetGameState(isGamePaused);
     }
 
-    private void SetGameState(bool isPaused)
+    public void SetGameState(bool isPaused)
     {
         if (isPaused)
         {
@@ -56,8 +58,8 @@ public class GameStateManager : MonoBehaviour
 
     private void PauseGame()
     {
-        inputActions.Player.Disable();
-        inputActions.UI.Enable();
+        // inputActions.Player.Disable();
+        // inputActions.UI.Enable();
 
         Time.timeScale = 0f;
 
@@ -67,8 +69,8 @@ public class GameStateManager : MonoBehaviour
 
     private void ResumeGame()
     {
-        inputActions.Player.Enable();
-        inputActions.UI.Disable();
+        // inputActions.Player.Enable();
+        // inputActions.UI.Disable();
 
         Time.timeScale = 1f;
 

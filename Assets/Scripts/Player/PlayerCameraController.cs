@@ -6,7 +6,8 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private Transform playerCamera;
 
     [Header("Sensitivity")]
-    [SerializeField] private float lookSensitivity = 0.15f;
+    [SerializeField] private bool useDebugSensitivity = true;
+    [SerializeField] private float debugLookSensitivity = 0.15f;
 
     [Header("Limits")]
     [SerializeField] private float topClamp = -89.0f;
@@ -24,7 +25,10 @@ public class PlayerCameraController : MonoBehaviour
     // Headbob tracking
     private float defaultYPosition = 0f;
     private float timer = 0f;
+    private Vector3 lastPosition;
 
+    // Sensitivity
+    private float currentSensitivity;
 
     private void Awake()
     {
@@ -39,6 +43,10 @@ public class PlayerCameraController : MonoBehaviour
             defaultYPosition = playerCamera.localPosition.y;
         }
 
+        lastPosition = transform.position;
+
+        currentSensitivity = useDebugSensitivity ? debugLookSensitivity : PlayerPrefs.GetFloat("MouseSensitivity", debugLookSensitivity);
+
         // TODO: Remove after game state management is implemented
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -52,7 +60,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void ApplyCameraLook()
     {
-        Vector2 lookInput = inputHandler.LookInput * lookSensitivity;
+        Vector2 lookInput = inputHandler.LookInput * currentSensitivity;
 
         // Calculate pitch, we subtract the Y input so pushing the mouse up looks up (standard non-inverted)
         cameraPitch -= lookInput.y;
@@ -66,18 +74,18 @@ public class PlayerCameraController : MonoBehaviour
 
     private void ApplyHeadbob()
     {
-        if (!characterController.isGrounded)
-        {
-            return;
-        }
-
-        // Calculate horizontal speed
-        float speed = new Vector3(characterController.velocity.x, 0, characterController.velocity.z).magnitude;
+        // Calculate actual physical distance moved this frame (ignoring Y/vertical axis)
+        Vector3 currentPos = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 previousPos = new Vector3(lastPosition.x, 0, lastPosition.z);
+    
+        float speed = Vector3.Distance(currentPos, previousPos) / Time.deltaTime;
+    
+        // Update last position for the next frame
+        lastPosition = transform.position;
 
         if (speed > 0.1f)
         {
-            // Advance the sine wave timer based on speed. 
-            // Dividing by 3.0f normalizes it against our base walk speed.
+            // Advance the sine wave timer based on speed.
             timer += Time.deltaTime * bobFrequency * (speed / 3.0f);
 
             // Increase amplitude if moving faster than walking
