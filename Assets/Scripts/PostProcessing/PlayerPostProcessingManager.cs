@@ -1,4 +1,3 @@
-using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;

@@ -2188,6 +2188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   musicSource: {fileID: 1516415628}
   sfxSource: {fileID: 1516415627}
+  ambienceSound: {fileID: 8300000, guid: d598c3cb713219443b7aca2454b8ac46, type: 3}
 --- !u!4 &1516415630
 Transform:
   m_ObjectHideFlags: 0

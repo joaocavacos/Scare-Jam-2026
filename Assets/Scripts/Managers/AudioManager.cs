@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class AudioManager : Singleton<AudioManager>
@@ -6,10 +7,17 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
 
+    [SerializeField] private AudioClip ambienceSound;
+
     protected override void Awake()
     {
         base.Awake();
         musicSource.loop = true;
+    }
+
+    private void Start()
+    {
+        PlayMusic(ambienceSound);
     }
 
     // Music
@@ -21,7 +29,7 @@ public class AudioManager : Singleton<AudioManager>
         }
         
         musicSource.clip = clip;
-        musicSource.volume = volume;
+        musicSource.volume = AudioListener.volume;
         musicSource.Play();
     }
 
@@ -59,8 +67,8 @@ public class AudioManager : Singleton<AudioManager>
         
         AudioSource tempSource = tempAudioObj.AddComponent<AudioSource>();
         tempSource.clip = clip;
-        tempSource.volume = volume;
-        
+        tempSource.volume = AudioListener.volume;
+
         // Configuration for 3D space
         tempSource.spatialBlend = 1f;
         tempSource.minDistance = 2f;  // Distance where sound is at maximum volume
