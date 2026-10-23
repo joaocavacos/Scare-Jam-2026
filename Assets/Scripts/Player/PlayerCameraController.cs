@@ -54,6 +54,11 @@ public class PlayerCameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
         ApplyCameraLook();
         ApplyHeadbob();
     }

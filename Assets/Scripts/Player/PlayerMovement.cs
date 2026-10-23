@@ -18,6 +18,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, ReadOnly] private bool isSprinting = false;
     [SerializeField, ReadOnly] private bool isCrouching = false;
 
+    public Transform GetPlayerTransform()
+    {
+        return transform;
+    }
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
