@@ -66,7 +66,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player escaped and recovered full health.");
     }
 
-    private void Die()
+    public void Die()
     {
         isDead = true;
         Debug.Log("Player Died!");
