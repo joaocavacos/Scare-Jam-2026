@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c113c980277e1c3469477cf4de3cb671, type: 3}
+  m_Name: Note_01
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: 
+  itemDescription: 'Date: Sept 21, 2026 | 13:05
+
+    Re: "The Overgrowth"
+
+
+    These plant creatures are multiplying. Since our first encounter on Sept 15th - when they took a coughing friend - workers keep vanishing. Some creatures even resemble them.
+
+
+    They are blind, hunting only by light and sound. Avoid their pollen, or you will cough uncontrollably. HOLD YOUR BREATH.
+
+
+    They camouflage perfectly into the aggressive plant growth tearing apart this two-year-old city. Initiate Corp sent my three-man team to investigate; buildings were already consumed by roots when we arrived. At this rate, the city will be a dense jungle in three months.
+
+
+    As detailed in my Sept 19th note, I now know Initiate Corp caused this.
+
+
+    - Spencer Dickens'
