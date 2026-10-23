@@ -31,6 +31,9 @@ public class MainMenu : MonoBehaviour
         mainMenuPanel.SetActive(true);
         optionsPanel.SetActive(false);
 
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         // Load saved settings (or use defaults if none exist)
         LoadSettings();
     }
